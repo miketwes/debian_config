@@ -1,0 +1,876 @@
+=================
+Wine
+=================
+
+ls /usr/bin/wine*
+file /usr/bin/wine-development
+ls /usr/lib*/wine*/wineserver
+/usr/lib/wine-development/wineserver
+sudo ln -s /usr/bin/wine-development /usr/bin/wine
+export WINE=wine-development
+sh winetrick
+
+wine-development c:/windows/system32/msiexec.exe /i 3D选号器安装向导.msi
+
+sudo apt-get install wine
+
+ 
+配置Wine纯净版
+
+转自http://forum.ubuntu.org.cn/viewtopic.php?f=24&t=384535
+
+    Dash -> 搜索wine，运行Configure Wine配置程序
+    激活“函数库”页面，在“新增函数库顶替”下拉框里输入“winemenubuilder.exe”，添加，编辑，停用
+    激活“函数库”页面，在“新增函数库顶替”下拉框里输入“winemine.exe”，添加，编辑，停用
+    如果已经将int main() { return 0; }编译成main.exe，则可以执行：
+    cp -f main.exe $HOME/.wine/drive_c/windows/system32/winemenubuilder.exe
+    cp -f main.exe $HOME/.wine/drive_c/windows/system32/winemine.exe
+    然后将第2、3两步中的停用改成原装。
+    “驱动器”页面，添加D分区，路径指定为$HOME/qpSOFT/Wine；同时将Z分区路径修改为$HOME
+    “关于”页面，填写Windows注册信息，姓名：loaden，单位：qpsoft
+    运行Winetricks程序，安装字体：corefonts，然后从XP系统拷贝simhei.ttf simsun.ttc至Fonts目录
+    视需要安装DLL或组件：winetricks cmd vcrun6 vcrun2003
+
+彻底清理Wine
+删除$HOME/.local/share/applications/mimeapps.list中含有wine的条目
+删除$HOME/.wine目录
+find $HOME/.config -name '*wine*' -exec rm {} \;
+find $HOME/.local -name '*wine*' -exec rm {} \;
+find $HOME/.local -name '*wine*' -exec rm -r {} \;
+rm -rf $HOME/.local/share/icons/hicolor
+rm -f $HOME/.local/share/applications/mimeinfo.cache
+
+Wine调用批处理时字体错误处理
+err:wineconsole:WCUSER_SetFont wrong font
+err:wineconsole:WINECON_Fatal Couldn't find a decent font, aborting
+方案：
+$LANG=C
+$wineconsole cmd 或$wineconsole XXX.bat
+另一方案：
+$wine cmd
+$XXX.bat
+这样就不会存在找不到中文字体的问题了，但要支持中文：
+1. 批处理文件编码必须是GBK
+2. 行尾必须用Windows风格
+
+64位系统Wine缺少gnome-keyring-pkcs11.so的错误处理
+详见点击打开链接
+1)安装getlibs:
+自己谷歌getlibs_2.06-0ubuntu1~ppa2_all.deb下载吧，转载的那个链接已失效
+sudo dpkg -i getlibs_2.06-0ubuntu1~ppa2_all.deb
+2) 安装32bit库:
+sudo getlibs -p gnome-keyring:i386
+3) 链接
+sudo mkdir /usr/lib/i386-linux-gnu/pkcs11
+sudo ln -s /usr/lib32/i386-linux-gnu/pkcs11/gnome-keyring-pkcs11.so /usr/lib/i386-linux-gnu/pkcs11/gnome-keyring-pkcs11.so
+
+64位Ubuntu系统，通过Wine模拟纯32位Windows
+打开终端，预设环境变量：
+export WINEARCH=win32
+export WINEPREFIX=$HOME/.wine32/
+winecfg
+winetricks ie6
+这样就可以解决64位Ubuntu中，Wine无法安装32位IE的错误。
+不过以后每次运行纯32位Windows中的程序，例如IE6，就需要先导出环境变量了。
+通过bash脚本可以简化操作：wine32.sh
+#!/bin/bash
+export WINEARCH=win32
+export WINEPREFIX=$HOME/.wine32/
+winefile
+在文件管理器中双击安装或运行。
+winetricks 用WineTricks令你的Wine更完整
+
+以下转自http://blog.csdn.net/arthur_yang/article/details/6365445
+
+Linux下最有名的Windows环境模拟器就是WINE了。它提供了一个可以模拟WINDOWS环境的基本平台，在这上面你几乎可以运行任何你想运行的windows程序。
+什么？你不相信？不要告诉我你的程序运行时总是提示缺少mfc42.dll。。。
+默认的WINE环境缺少很多WIN平台的库，而且最可恨的是，system32目录下竟然没有regedit程序。
+
+下面我来介绍一下，如何让你的WINE环境更为完整。
+我示范的linux发行版是ubuntu 9.04， wine的版本号是1.1.26
+
+    准备正确的注册表编辑器
+    首先将/home/你的用户名/.wine/dosdevices/c:/windows下的regedit.exe程序复制到system32目录下。
+    命令：
+    sudo cp /home/你的用户名/.wine/dosdevices/c:/windows/regedit.exe /home/你的用户名/.wine/dosdevices/c:/windows/system32/
+    下载并安装winetricks
+    wget http://www.kegel.com/wine/winetricks
+    chmod +x winetricks
+    sudo mv winetricks /usr/local/bin
+    winetricks安装必须的win支持库。这一步很关键。
+    命令行中输入winetricks
+    然后勾选colorprofile、corefonts、d3dx9、fontfix、fontsmooth-gray、fontsmooth-rgb、fontsmooth-bgr、gdiplus、mfc40、mfc42、msxml3、msxml4、msxml6、riched20、riched30、tahoma、urlmon、vb6run、vcrun6、vcrun2003、vcrun2005、vcrun2008、ie6、allfonts
+    然后选择安装。
+    下面输入winetricks后，勾选dotnet11、dotnet20、vjrun20并安装。
+
+都安装完毕以后，有兴趣的朋友可以尝试安装一下powerdesigner看看能不能用。哈哈。
+更多信息请参见http://wiki.winehq.org/winetricks
+
+Wine的其中一个开发者DanKegel写的一个安装Windows有关库和软件的小程序，非常有用！
+介绍一下使用方法：
+
+    打开终端，输入
+    wget http://www.kegel.com/wine/winetricks
+    再输入
+    sudo apt-get install cabextract
+    再输入
+    chmod +x winetricks
+    最后
+    ./winetricks
+
+在打开的窗口中，可以看到程序所支持的一个软件列表
+代码:
+
+art2kmin 微软 Access 2000 运行时.
+colorprofile 标准 RGB 颜色配置文件
+comctl32 微软 common controls 5.80
+comctl32.ocx 微软的comctl32.ocx 和comctl.ocx,VB6的comctl32外壳
+corefonts 微软 Arial, Courier, Times 字体
+dcom98 微软 DCOM, 替换Wine所自带的
+dirac0.8 the obsolete Dirac 0.8 directshow filter
+directx9 微软 DirectX 9
+divx divx 视频编码
+dotnet11 微软 .NET 1.1
+dotnet20 微软 .NET 2.0
+ffdshow ffdshow 视频编码
+flash Adobe Flash Player ActiveX 与 firefox 插件
+fontfix Fix bad fonts which cause crash in some apps (e.g. .net).
+gdiplus 微软 gdiplus.dll (须安装powerpoint)
+gecko HTML 渲染引擎(Mozilla)
+icodecs Intel 媒体编码 (Indeo)
+jet40 微软 Jet 4.0 Service Pack 8
+liberation Red Hat Liberation 字体 (Sans, Serif, Mono)
+mdac25 微软 MDAC 2.5: 微软 ODBC 驱动, etc.
+mdac27 微软 MDAC 2.7
+mdac28 微软 MDAC 2.8
+mfc40 微软 mfc40 (Microsoft Foundation Classes from Visual C++ 4)
+mfc42 微软 mfc42 (包含于下面的vcrun6)
+mono19 mono-1.9.1-gtksharp-2.10.4-win32-2
+msi2 微软 Installer 2.0
+msls31 微软 Line Services 3.1 (needed by native riched?)
+msxml3 微软 XML version 3
+msxml4 微软 XML version 4
+msxml6 微软 XML version 6
+ogg ogg 过滤器和编码器: flac, theora, speex, vorbis,
+pdh 微软 pdh.dll (Performance Data Helper)
+quicktime72 苹果 Quicktime 7.2
+riched20 微软 riched20 and riched32
+riched30 微软 riched30
+tahoma 微软 Tahoma 字体 (not part of corefonts)
+vb3run 微软 Visual Basic 3 运行时
+vb4run 微软 Visual Basic 4 运行时
+vb5run 微软 Visual Basic 5 运行时
+vb6run 微软 Visual Basic 6 运行时
+vcrun6 微软 Visual C++ 6 sp4 运行库 (包括mfc42.dll, msvcp60.dll, msvcrt.dll)
+vcrun2003 微软 Visual C++ 2003 运行库 (包括mfc71.dll,msvcp71.dll,msvcr71.dll)
+vcrun2005 微软 Visual C++ 2005 运行库 (包括mfc80.dll,msvcp80.dll,msvcr80.dll)
+vcrun2005sp1 微软 Visual C++ 2005 sp1 运行库
+vcrun2008 微软 Visual C++ 2008 运行库 (包括mfc90.dll,msvcp90.dll,msvcr90.dll)
+vjrun20 微软 Visual J# 2.0 运行库 (需要安装 dotnet20)
+wmp9 微软 Windows Media Player 9
+wmp10 微软 Windows Media Player 10
+wsh51 微软 Windows Scripting Host 5.1
+wsh56 微软 Windows Scripting Host 5.6
+wsh56js 微软 Windows scripting 5.6, 只有jscript,没有cscript
+wsh56vb 微软 Windows scripting 5.6, 只有vbscript,没有cscript
+xvid xvid 视频编码
+autohotkey Autohotkey (open source gui scripting language)
+firefox3 Firefox 3
+kde KDE for Windows installer
+mpc Media Player Classic
+vlc VLC media player
+allfonts 以上所有字体 (corefonts, tahoma, liberation)
+allcodecs 以上所有媒体编码 (xvid, ffdshow, icodecs)
+fakeie6 在注册表中写入IE6已安装信息
+native_mdac Override odbc32 and odbccp32
+nt40 Set windows version to nt40
+win98 Set windows version to Windows 98
+win2k Set windows version to Windows 2000
+winxp Set windows version to Windows XP
+vista Set windows version to Windows Vista
+winver= Set windows version to default (winxp)
+volnum Rename drive_c to harddiskvolume0 (needed by some installers)
+
+还有什么不懂百度吧，百科里面的也是有很多的。
+
+============================2014.01.16更新=============================
+[翻译]Wine完全使用指南——从基本到高级
+
+鉴于Wine的迅猛发展，本文的内容已经有些已经不适用了。Wine的自动化提高了很多，以前的很多设置已经不必要了。参考一下就好了。
+
+为了回应最近网友的一些普遍问题，特此作以下说明：
+1、如果发现wine的注册表没有相应的键值，要自己创建。有时候用命令不行的话，只能手动一个个添加。
+2、wine还是一个不成熟的软件，经常出现bug，一切使用的问题和风险都只能自己承担。
+3、wine并不完善，不是所有程序都能用wine解决，有些甚至根本无法解决（反作弊，凡外挂，虚拟光驱等）。
+
+一直苦于没有一篇像样的使用指南，原来外国有朋友跟我有同感，既然他捷足先登了，那我只好翻译了。
+原文作者说会保持更新，这篇文章是很新的，介绍了很多实用的Wine设置方法，非常全面，无论新手还是老鸟都值得一读。
+原文：
+http://sudan.ubuntuforums.com/showthread.php?t=497332
+
+我收集到的关于Wine的一些资料
+
+如果你像我一样的话，当你第一次使用Wine的时候，就会被Wine的帮助文章现状所困扰。互联网上确实有很多的HOWTO文章来教你使用一些程序或游戏，但是我找不到一个全面的“Wine初学者教程”来让我真正懂得实际了解和使用Wine所需的基本知识。我不需要一个教我如何运行半条命2的文章，我需要的是一篇能实实在在教我怎样使用Wine的文章。最后，我整理了从众多的Wiki、指南、帖子和HOWTO搜集来的资料，写成这篇文章。虽然这篇文章主要针对在Wine下运行游戏，但是它包括的几乎所有的信息都可以应用到用Wine来运行其它的程序。
+
+一般资料
+“winecfg”的使用资料
+特殊配置资料
+安装资料
+一般使用资料
+第三方软件资料
+高级设置资料
+
+1一般资料
+
+1.1Wine is not an emulator
+这个我就不翻译了，没有多少技术介绍。
+
+1.2使用最新的Wine
+记住最新版的Wine会包含一些旧版本里没有的bug。在feisty的软件仓库里包含了0.9.33，而最新的Wine是0.9.44（我翻译文章时）。0.9.33更加稳定，但是最新的版本包含重大的DirectX改进。有一些不能在0.9.33下运行的游戏能够在0.9.44中很好地运行。在使用0.9.37到0.9.40之间的某些版本运行KotOR2时，声音在我的系统上崩溃了。那是最好的有关使用最新版导致棘手问题的好例子。
+（译者：我个人还是推荐使用最新版，使用新版本会有更好的运行速度，而且基本上每个bug都会在未来的2~3个版本中被修复）
+
+1.3不要从源码编译安装Wine
+（译者：作者没有说为什么，可能是因为编译要解决的依赖性问题太多了。
+我个人还是推荐编译安装，这样安装完后问题少一点，性能好一点。）
+
+1.4使用终端
+如果正确安装的话，wine会把它自己关联到exe文件，所以你只要双击exe文件就可以运行。无论怎样，这都不是我们所推荐的使用wine的方法（译者：我也不推荐）。使用终端会比较好，因为这样可以正确地设定程序的路径，否则程序就会找不到所需要的文件。另外，使用终端还可以显示出错误信息，这对于解决问题是非常有用的。
+
+1.5准备对付挫折
+Wine并不完美。不会所有的事情都能顺利发展，有时候甚至需要你自己去解决问题。但你现在是一个linux用户了，你就要准备着去应付。
+
+2“winecfg”的使用资料
+
+2.1运行“winecfg”
+你至少需要运行一次winecfg来设置wine的目录和硬件。
+
+2.2虚拟桌面
+使用这个选项可以使软件的安装更加流畅。我发现在不使用这个选项的时候，使用某些程序会导致已经激活的对话框、CDKEY输入窗口或更换光盘的确认窗口不能出现在前端。让我以为程序卡死了，就kill掉了进程。选择这个选项还能够避免程序锁死你的桌面或者把你的屏幕分辨率改成难看的模式。
+
+2.3使用Application Settings
+你可以在winecfg的Application标签里的Application Settings对话框对个别的程序进行自定义设置。那里只允许你进行windows兼容运行模式设置（译者：像windows下的exe属性里的兼容性标签）、某些显示设置和DLL的设置。
+当你只需要设置某个程序使用某些特定的windows自带的DLL，不希望其它程序（包括wine）使用这些native的DLL的时候（而其它程序使用这些DLL会导致问题），（译者：wine自带的DLL叫做builtin，windows下原生的DLL叫做native）这个选项就会变得十分有用。在进行DLL设置时我都用这个方法，就是为了防止某些对wine的运行存在潜在威胁的nativeDLL被wine调用（译者：在一般情况下，wine只调用自带的builtinDLL，而不会使用native的DLL，版权问题，除非经过设置，如上所述）。这样我就只是修改了那些可执行的配置文件，当我不需要时，可以改回来而不会损坏整个Wine。（译者：设置这些东西之前，保证已经将一个程序的exe文件添加到Application标签的白框中，并且反色选中。不是default的那个，是你所需要设置的那个exe文件。）
+
+2.4Windows版本
+对不同的程序尝试不同的Windows版本。这就是说一个为了XP而设计的游戏可能会在wine的98模式的支持下能更好地运行。在做这个之前确认你已经把程序添加到Application的白框中，并且选中，反色显示。
+
+2.5使用ALSA驱动
+有些游戏是需要OSS才能运行，但是OSS已经不会再继续开发了。
+（译者：推荐只是独立声卡使用ALSA，集成的还是使用OSS最好）
+
+2.6不要总是选择allow the window manager to control the windows（winecfg里的）
+使用这个选项有时候会使游戏在全屏幕运行时出现问题。当前的wine版本0.9.39+已经修正了多数游戏的全屏问题，但是引入了一个新的问题：当不使用这个选项时，会使键盘不能游戏中输入。在使用一个单独的X server来运行游戏时，这个问题可以得到解决。（见“高级设置资料”）
+
+2.7谨慎对待DLL
+winecfg可以让你用native的DLL替换builtin的DLL。下面的这些DLL是绝对不能被替换的。kernel32.dll，gdi32.dll，user32.dll，和ntdll.dll。有些nativeDLL也可能使一些程序不能运行。记得永远不要覆盖wine自带的dll，如果native的用不了就用builtin的换回来。有些MS的DLL要得到许可才能用，如果你没有许可，就不要用。
+
+3特殊配置资料
+
+3.1建立一个到CD的链接
+Wine会建立一个到你挂载CD的文件夹的链接，但是建立一个到真正的/dev里的设备的链接会更好。我发现如果不这样做，Wine会自己建立到/dev的链接，把CD认成E：盘，而我的挂载目录却链接为D：盘。我认为这个可能会导致某些使用CD安装的程序出现问题。修改/dev/hdc以适应你的系统（译者：7.04一般都是/dev/scd0）。
+代码:
+ln -s /dev/hdc ~/.wine/dosdevices/d\:\:
+
+
+3.2实用注册表键值
+有些设置是不能通过winecfg来进行设置的，但是可以在注册表中进行设置。在wine的wiki中有一篇保持更新的文章
+http://wiki.winehq.org/UsefulRegistryKeys
+有两个键值是非常有用的，一个是Alsa Driver的UseDirectHW，可以解决一些声音跳顿的问题；还有Direct3D的VideoMemorySize，你应该设置成你的显卡的准确显存，默认wine会设置成64MB。
+
+3.3WINEPREFIXCREATE
+这个我暂时不翻译
+
+3.4安装Wine Gecko IE engine
+有些程序的运行依赖于IE，但是，安装IE会严重地破环Wine。所以可以安装Wine Gecko IE engine作为替代品。
+1、在终端下运行下面的命令：
+代码:
+wine iexplore http://www.winehq.org
+2、当出现安装提示时回答yes
+3、打开http://wiki.winehq.org/UsefulRegistryKeys，找到HKEY_LOCAL_MACHINE板块
+4、把所有有关Internet Explorer的键值加到注册表中
+
+安装完成后，运行
+代码:
+wine iexplore http://www.winehq.org
+
+成功的话就会出现winehq的主页。
+
+3.5中文支持设置
+把下面的代码保存为zh.reg，然后终端执行regedit zh.reg。从Windows目录下的Fonts里的simsun.ttc复制到/home/user/.wine/drive_c/windows/fonts里面。
+代码:
+
+REGEDIT4
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\FontSubstitutes]
+"Arial"="simsun"
+"Arial CE,238"="simsun"
+"Arial CYR,204"="simsun"
+"Arial Greek,161"="simsun"
+"Arial TUR,162"="simsun"
+"Courier New"="simsun"
+"Courier New CE,238"="simsun"
+"Courier New CYR,204"="simsun"
+"Courier New Greek,161"="simsun"
+"Courier New TUR,162"="simsun"
+"FixedSys"="simsun"
+"Helv"="simsun"
+"Helvetica"="simsun"
+"MS Sans Serif"="simsun"
+"MS Shell Dlg"="simsun"
+"MS Shell Dlg 2"="simsun"
+"System"="simsun"
+"Tahoma"="simsun"
+"Times"="simsun"
+"Times New Roman CE,238"="simsun"
+"Times New Roman CYR,204"="simsun"
+"Times New Roman Greek,161"="simsun"
+"Times New Roman TUR,162"="simsun"
+"Tms Rmn"="simsun"
+
+4安装资料
+
+4.1不要在CD的目录下安装程序
+（译者：就是不要cd到CD的挂载目录运行安装程序）
+如果这样做的话，就会在换CD时出现CD不能推出的问题，用下面的命令来安装CD：
+代码:
+wine /media/cdrom0/setup.exe
+
+
+4.2需要用到“wine eject”
+如果安装程序需要你换CD，而系统却说不能推出CD，那就打开一个新终端，输入：
+代码:
+wine eject d：
+
+
+4.3安装InstallShield的bug补丁
+安装http://support.installshield.com/kb/files/Q108322/IkernelUpdate.exe
+这个补丁可以解决一些CD安装问题。
+
+4.4使用uninstaller
+使用命令“uninstaller”来卸载安装的程序，不要使用程序在菜单里面创建的卸载快捷方式，他们有时候不能正常工作，而uninstaller可以。
+
+4.5安装.msi文件
+有些windows的安装程序是使用msi来安装的，那就用下面的命令来安装：
+代码:
+wine msiexec /i install.msi
+
+或者
+代码:
+wine start install.msi
+
+4.6不要安装DirectX
+Wine有它自己的DirectX库，安装微软的DirectX会破坏wine的DirectX库和Wine。
+但是，d3dx9_##.dll和d3dx10_33.dll可以从Windows复制过来使用，可能会在启动某些游戏时有所帮助。使用这些dll你需要微软的授权证书。
+
+5一般使用资料
+
+5.1如何用wine来运行程序
+代码:
+wine application.exe
+
+
+5.2运行程序前cd到程序的安装目录
+cd到程序的安装目录再运行程序。
+
+5.3关掉WINEDEBUG
+一般情况下，wine会不断地产生一些debug信息（那些“fixme”的东西）。那些信息在很多情况下是没有用的，尤其你已经可以正常地运行一个程序。你可以使用下面的命令来避免debug信息，节省资源：
+代码:
+WINEDEBUG=-all game.exe
+
+
+5.4不要使用root或者sudo来运行wine
+可能会损坏系统文件。
+
+5.5其他wine的命令
+wineboot 模拟windows的重新启动
+wine control 运行控制面板
+wineserver wineserver会随着wine的命令自动启动，但也能通过终端启动来达到不同的目的。
+wineserver的一些参数
+1、-d# 设置终端中debug的显示级别。
+2、-h 显示wineserver帮助文件
+3、-k kill掉当前的wineserver，当程序失去响应而你要结束它时使用。
+4、-p 让wineserver一直运行，也就是说即使程序退出了，wineserver还继续运行。当你需要运行连续的程序时可以使用，这样可以缩短程序的启动时间。
+5、-w 让wineserver一直运行直到当前已激活的wineserver退出。
+
+5.6让Wine运行更流畅
+当出现程序运行缓慢或性能起伏不定的问题时，可以通过提高进程的优先级来解决。启动游戏后，可以使用“renice”命令来改变进程的优先级。“renice”命令可以改变当前进程的优先级，“nice”的值是优先级级别的标志，（高优先级=低nice值，低优先级=高nice值）。这个命令把程序优先级的值设置为从-20（最高优先级）到19（最低优先级）之间的任何一个整数值，而默认的值是0。在启动游戏以后，你需要打开另外一个终端输入下面的命令来改变程序的优先级：
+代码:
+sudo renice -10 -n game.exe
+
+在用Wine运行游戏时，我不推荐直接把程序的优先级设置到-20，最好是从-10开始，如果效果提升不明显，可以一步步尝试小幅度的提高（-11，-12，……）。你会发现绝大多数的游戏不需要比-10更高的优先级就已经可以达到最好的性能了。不用多说（我认为），在游戏中你可以用ALT-TAB组合键回到桌面使用“renice”命令。
+
+第二种方法
+使用图形界面来设置优先级。
+1、 用终端运行游戏，按ALT-TAB回到桌面
+2、 系统——>系统管理——>系统监视程序，切换到进程标签
+3、 在进程上点右键——更改优先权
+4、 要求密码时输入
+5、 关闭系统监视程序，用ALT-TAB回到游戏
+
+6第三方软件资料
+
+6.1 WineTools
+WineTools是一个菜单式的可以安装90多个常见Windows程序的软件。它也可以帮助你设置Wine的基本目录。已经不再有人维护WineTools，它已经两年没有升级了，但很多用户都发现它依然有用。而WineTools所作的一切事情都可以自己通过winecfg或终端完成。
+
+6.2Wine-Doors
+Wine-Doors是一个帮助你安装很多的Windows程序，包括游戏的一个图形界面的软件。它现在还处在开发阶段，但已经发布了一个可以下载的最初版本。就这个软件看来，是非常有前途的。
+
+6.3Cedega
+Cedega就技术上来说是Wine的一个分支，它明确地针对于游戏。cedega包含了一个安装和运行游戏的图形界面，还加上了对受防拷贝保护的软件的支持（不需要使用破解来免CD）（译者：wine的对防拷贝的支持不是很好）。cedega不适免费的，最低消费是购买3个月，每月3美元，如果预付一年的费用的话，可以享受一点折扣。cedega从前叫做WineX，在Wine还是MIT软件，而不是现在的GPL的时候，WineX就从wine的一个分支分离出来，就因为cedega不属于GPL，cedega不再对wine的代码发展作贡献了。再加上cedega缺少支持，很多人便不再用cedega在linux下玩游戏。
+
+6.4CrossOver
+CrossOver从技术上来说，CrossOver不是wine的一个第三方产品，而是wine的主要财力支持者。CrossOver一开始是以在linux下运行Microsoft Office软件为目标的，但最近它开始添加对游戏的支持。CrossOver基于一个更老，更稳定的Wine版本（译者：好像是0.9.17），但CrossOver也随着Wine一起升级。CrossOver标准版的售价是39.95美元。
+
+6.5ReactOS
+正如CrossOver一样，ReactOS也是Wine的一个支持者，基于许多Wine已经完成的成果，它致力于建立一个能与Windows完全兼容的操作系统。完成后，ReactOS能够使用Windows的驱动程序和软件，完全兼容。这项计划还处于开发阶段，但已经可以提供安装CD、LiveCD、QEMU和VMware镜像的下载。
+
+7高级设置资料
+
+7.1使用启动脚本（使用之前确保游戏能够正常运行）
+再使用单独得X server时，很多游戏一般都可以发挥出他们最佳性能。wine不需要窗口管理器（GNOME或KDE）就可以正常地运行，所以如果你在一个单独的X server下运行游戏，你会得到明显的性能提升。在运行游戏之前，关闭GDM或KDM，还会得到更大的性能提升（只能通过控制（console）台来实现）。
+1、首先，在终端下建立一个脚本
+代码:
+nano launcher.sh（可以用vim替换nano）
+
+2、复制下面的文字到终端里。如果你没有nVidia的显卡，就删除nvidia settings的那部分，然后用你的游戏的正确路径替换里面的路径
+代码:
+
+#!/bin/sh
+#uncomment if launching from console session
+#sudo /etc/init.d/gdm stop
+#KDE use this instead
+#sudo /etc/init.d/kdm stop
+# Launches a new X session on display 3. If you don't have an Nvidia card
+# take out the "& nvidia-settings --load-config-only" part
+X :3 -ac & nvidia-settings --load-config-only
+
+# Goto game dir (modify as needed)
+cd "$HOME/.wine/drive_c/Program Files/Game/Directory/"
+
+# Forces the system to have a break for 2 seconds, X doesn't launch instantly
+sleep 2
+
+# Launches game (modify as needed)
+DISPLAY=:3 WINEDEBUG=-all wine "C:/Program Files/Game/Directory/game.exe"
+
+3、把文件保存到你的主文件夹（保存Ctrl+O，退出Ctrl+X。Vim的话先Esc，再Shift+：，保存w，退出q）
+4、然后，给你的脚本加上可执行属性
+代码:
+chmod +x ~/launcher.sh
+
+5、运行脚本
+代码:
+sh launcher.sh
+
+或
+代码:
+./launcher.sh
+
+
+6、结束游戏后，用CTRL-ALT-BACKSPACE回到桌面
+
+第二种方法
+如果你的游戏不能运行或者只是单纯想压榨出更好的游戏性能，跟着下面的步骤尝试在关闭X session的情况下运行游戏。
+1、取消注销“sudo /etc/init.d/gdm stop”语句（删除#）后保存，如果你是使用KDE，就取消注销“sudo /etc/init.d/kdm stop”。
+2、关闭所有程序，按CTRL-ALT-F1打开控制台
+3、在控制台登陆并运行这个脚本。你会被要求输入密码，然后游戏会在它自己的X session里运行，而没有GDM或KDM的妨碍。
+4、如果脚本显示你没有启动X session的权限，就修改那个脚本
+按照这样修改X server的启动语句
+代码:
+sudo X :3 -ac & nvidia-settings --load-config-only
+
+注意：为了避免修改脚本，你可以修改Xwrapper.config给与一般用户启动X的权限。用sudo vim打开/etc/X11/Xwrapper.config，把allowed_users=console修改为allowed_users=anybody。
+
+5、结束游戏后，可以重启或CTRL-ALT-BACKSPACE回到控制台，重新启动X和桌面：
+代码:
+sudo /etc/init.d/gdm start
+
+如果是KDE
+代码:
+sudo /etc/init.d/kdm start
+
+桌面会很快出现，还不行的话就输入
+代码:
+startx
+
+注意：
+1、如果让游戏使用它自己的X session，确认禁止winecfg里的virtual desktop。
+2、让游戏使用它自己的X session可以解决在游戏时键盘无法输入的问题。
+原附件地址:
+文件注释: InstallShield的bug补丁
+ IkernelUpdate.zip [933.21 KiB]
+被下载 1914 次
+
+===分流地址===
+
+本博客IkernelUpdate.zip
+网盘
+
+==============================================================
+[Wine]以及[中文显示补丁]的安装-1.1.3
+
+中文显示补丁是根据本论坛ct兄的中文按钮补丁做的修改，不是汉化补丁，也不是必须的，并且本补丁可能与某些软件有冲突。
+安装打好本补丁的Wine可以解决某些在设置中文字体后（比如http://forum.ubuntu.org.cn/viewtopic.php?t=72933）依然出现的乱码问题，比如在运行QQ时QQ面板底部的搜索标志——放大镜旁边的“搜索”字样的乱码等等，因此也应该可以解决某些股票软件中出现的中文乱码的问题。
+
+如果你是一个绝对的新手，请你先去了解一下：http://wiki.ubuntu.org.cn/index.php?title=Ubuntu%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B&variant=zh-cn
+
+请到Wine中文AppDB来看看有没有想要使用的软件
+
+下面我先介绍一下Wine的安装方法再介绍本补丁的安装方法。
+
+原版Wine的安装：
+对于8.04的ubuntu，打开终端，分别输入
+代码:
+wget -q http://wine.budgetdedicated.com/apt/387EE263.gpg -O- | sudo apt-key add -
+
+ 
+代码:
+sudo wget http://wine.budgetdedicated.com/apt/sources.list.d/hardy.list -O /etc/apt/sources.list.d/winehq.list
+
+ 
+代码:
+sudo apt-get update
+
+然后打开新立得，搜索Wine，就可以安装了。
+
+关于Wine的详细介绍，虽然有些内容已经过时，不过对于新手值得一看：http://wiki.ubuntu.org.cn/Wine%E7%AE%80%E4%BB%8B
+
+打了补丁的Wine的安装：
+
+你不懂怎么打补丁的话可以选择安装我提供deb包，或者自己编译，你看着办吧。 :D :D
+
+我已经把8.04-32bits的deb包做出来了，在http://ftp.ubuntu.org.cn/home/windowssux/Wine_CN/。
+登录的用户名和密码在http://forum.ubuntu.org.cn/viewtopic.php?t=9685。
+
+A、下面是deb包的安装方法：
+
+1、下载wine_1.1.3~winehq0~ubuntu~8.04-0ubuntu1_i386.deb，放在你的主文件夹
+2、在deb包的上面点击右键，选择用GDebi软件包安装程序打开。
+3、点击安装，它会帮你把一切所依赖的包全部下载安装。
+4、安装结束后，在终端输入winecfg进行wine的初始设置（自动的）。进一步的使用请查看其他相关的帖子。
+5、如果你觉得他下载依赖包的时候速度太慢，你可以打开终端输入
+代码:
+sudo dpkg --info wine_1.1.3~winehq0~ubuntu~8.04-0ubuntu1_i386.deb
+
+会列出这个软件包的有关信息，其中Depends后面跟的一大串就是它的依赖关系（包括版本要求）。只要在终端中输入
+代码:
+sudo apt-get inatall ***
+
+就可以了，其中***就是Depends列出的软件包的名字，比如binfmt-support，可以连续输入几个软件包，但中间用空格隔开，如
+代码:
+sudo apt-get install *** *** ***
+
+B、下面是编译安装的方法：
+
+1、以前安装有wine的先把wine卸载。
+
+2、先下载下面的脚本，8.04的就下“8.04－hardy的依赖安装脚本”，7.10的就下“7.10-gutsy的依赖安装脚本”。
+下载后解压并且放在你的主文件夹，并且打开终端，执行下面的命令，比如8.04的：
+代码:
+chmod +x hardy.sh
+sudo ./hardy.sh
+
+网络通畅的话（我用的是台湾的源，速度很快），脚本会自动帮你完成依赖包的安装。
+
+3、接下来下载并解压Wine的源码包，放到你的主文件夹，右键选择“解压缩到此处“，这样就会在你的主文件夹出现一个文件夹Wine-***（比如Wine-1.0），再下载我提供的wine_charset.patch.tar.gz，也放到主文件夹后解压，得到wine_charset.patch，把wine_charset.patch复制到wine-1.0里面。
+
+4、打开终端，输入
+代码:
+cd wine-1.0
+patch -p1 < wine_charset.patch
+
+这样你的wine就打好补丁了。
+
+5、接下来还是在wine-1.0目录下执行：
+代码:
+ ./configure
+make depend && make
+sudo make install
+
+就完成了安装。
+
+6、最近我发现打了这个中文显示补丁以后，就不用再进行字体设置了，注册表不用改了，不用复制一大堆的字体了，好像是调用了系统的字体。所以，下面是一堆废话。仅供参考。
+代码:
+按照[url]http://forum.ubuntu.org.cn/viewtopic.php?t=72933[/url]的第3.5部分的说明进行设置。
+如果zh.reg导入不成功，也就是在终端输入regedit后看不到相应的键值，
+那只好手动修改wine注册表：
+
+终端输入regedit，按照HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\FontSubstitutes找到FontSubstitutes这个键，没有的话就在CurrentVersion下新建一个key（在CurrentVersion图标上右击，选择key），名字是FontSubstitutes。再双击FontSubstitutes后，在右边的窗口建立新的键值。比如在空白上右击后选择新建String Value，命名为Arial；再双击Arial，输入simsun。以下类推。[color=red]一切键值都要注意大小写。[/color]
+
+6、补丁应用成功的，在安装后第一次运行winecfg时，终端会出现下面一段文字
+代码:
+fixme:font:WineEngCreateFontInstance Dirty hack. Default and ansi charset is translated to getenv("WINE_DEFAULT_CODEPAGE")
+
+其实以后每一次打开wine的程序或者windows的程序，在终端都可以看到这两句话。
+附件:
+文件注释: wine_charset.patch
+ wine_charset.patch.tar.gz [710 Bytes]
+被下载 2594 次
+文件注释: 8.04－hardy的依赖安装脚本
+ hardy.sh.zip [1.03 KiB]
+被下载 1476 次
+文件注释: 7.10-gutsy的依赖安装脚本
+ gutsy.zip [1.16 KiB]
+被下载 442 次
+
+
+
+How to kill wine processes
+
+killall nameofexefile.exe
+
+just like linux processes
+shareimprove this answer
+	
+edited Jul 7 '12 at 13:09
+Eliah Kagan
+72.7k20198327
+	
+answered Jul 8 '11 at 17:52
+Conor Rynne
+43235
+	
+   	 
+	
+is this just for wine or for all running process in linux? – 13east Jul 9 '11 at 1:22
+   	 
+	
+this will kill any process, windows via wine, or linux – Conor Rynne Jul 9 '11 at 6:41
+   	 
+	
+So wineserver -k will kill all wine processes... it's what I meant... I don't use killall <file>.exe as often I don't know the exact name of the file (and when the system goes crazy I won't know in any case) – Hadden Jul 10 '11 at 0:49
+   	 
+	
+ahhh right then in that case wineserver -k will probably do the job. Just be careful you don't have any other wine processes open, that includes programs in PlayOnLinux and Crossover too. – Conor Rynne Jul 10 '11 at 10:41
+add a comment
+up vote
+22
+down vote
+	
+
+You can safely kill wine sessions either via ALT+F2 or via a terminal by typing
+
+wineserver -k
+
+If it is really doesnt want to shutdown then you can force it via
+
+wineserver -k9
+
+shareimprove this answer
+	
+answered Jul 8 '11 at 17:59
+fossfreedom♦
+
+
+Well, as a wine programmer, I often will munge up the whole damn thing, so I use my super special killwine script. This is a hard death (wineserver -k is the nice way to do it and always preferred).
+
+#!/bin/bash
+
+wine_cellar="${HOME}/.local/share/wine"
+
+if (($#)); then
+    if [[ -e "${wine_cellar}/$1" ]]; then
+        WINEPREFIX="${wine_cellar}/$1"
+        shift
+    elif [[ "${1:0:1}" != "-" ]]; then
+        echo "ERROR: Didn't understand argument '$1'?" >&2;
+        exit 1
+    fi
+fi
+
+if ((${#WINEPREFIX})); then
+    pids=$(
+        grep -l "WINEPREFIX=${WINEPREFIX}$" $(
+            ls -l /proc/*/exe 2>/dev/null |
+            grep -E 'wine(64)?-preloader|wineserver' |
+            perl -pe 's;^.*/proc/(\d+)/exe.*$;/proc/$1/environ;g;'
+        ) 2> /dev/null |
+        perl -pe 's;^/proc/(\d+)/environ.*$;$1;g;'
+    )
+else
+    pids=$(
+        ls -l /proc/*/exe 2>/dev/null |
+        grep -E 'wine(64)?-preloader|wineserver' |
+        perl -pe 's;^.*/proc/(\d+)/exe.*$;$1;g;'
+    )
+fi
+
+if ((${#pids})); then
+    set -x
+    kill $* $pids
+fi
+
+This assumes that you're wine prefixes are under ~/.local/share/wine. Usage examples are:
+
+killwine                       # Just kill all instances of wine
+killwine -9                    # Hard kill them all
+killwine lotro                 # Only kill wine under ${HOME}/.local/share/wine/lotro
+killwine -INT lotro            # Same as above, but use SIGINT
+WINEPREFIX=/tmp/crap killwine  # Kill only the instance under /tmp/crap
+sudo reboot                    # Pretend you're running windows.
+
+I don't know, but I don't think you'll often end up with various processes hung in memory (what this script takes care of) on a normal or even normal+staging release, but I do quite a lot because of hacking the server and ntdll.
+
+EDIT: This script will only work on a Linux-based OS and assumes that the proc file system is mounted on /proc, etc.
+shareimprove this answer
+	
+edited Jan 5 '17 at 5:11
+muru
+112k17229386
+	
+answered Feb 11 '16 at 5:54
+Daniel Santos
+1312
+	
+   	 
+	
+Works like a charm, while wineserver -k or -k9 didn't succeed. – Michael-A-D Jan 4 '17 at 0:23
+   	 
+	
+Ahh, thanks! I seem to have lost my copy of this script and now I have it again! I should mention that this will only work on a Linux-based OS, as it digs through /proc. – Daniel Santos Jan 5 '17 at 4:55
+add a comment
+up vote
+0
+down vote
+	
+
+I was just about to have the same problem. This command in terminal helped me. Press Ctrl + Alt + t and then write the following:
+ps -x | grep "Your program name" | awk '{print $1}' | xargs kill
+
+Your program name should be written without quotes, It helped me solving oblivion.exe:
+ps -x | grep Oblivion | awk '{print $1}' | xargs kill
+shareimprove this answer
+	
+edited Feb 1 '15 at 22:35
+	
+answered Jan 26 '15 at 10:36
+Luke359
+
+	
+
+My version:
+
+ls -l /proc/*/exe 2>/dev/null | grep -E 'wine(64)?-preloader|wineserver' | perl -pe 's;^.*/proc/(\d+)/exe.*$;$1;g;' | xargs -n 1 kill
+
+It kills all wine processes. Thanks to this post https://askubuntu.com/a/732320/605355
+
+
+http://howto.landure.fr/gnu-linux/install-directx-9-0c-on-linux-using-wine
+------------------------------------------------------------------------------------
+
+/usr/bin/sudo /usr/bin/apt-get install wine cabextract wget
+
+We create the Wine environment folder:
+
+/usr/bin/wineprefixcreate
+
+configure the sound so that Wine use ALSA:
+
+/usr/bin/wget http://howto.landure.fr/gnu-linux/installer-directx-9-0c-avec-wine/audio.reg \
+    --output-document=/tmp/audio.reg
+/usr/bin/regedit /tmp/audio.reg
+
+
+/usr/bin/wget http://howto.landure.fr/gnu-linux/installer-directx-9-0c-avec-wine/video_ram.reg \
+    --output-document=/tmp/video_ram.reg
+
+
+/usr/bin/lspci | /bin/grep VGA | /bin/sed -e 's/^\([^ ]* \).*/\1/' \
+    | /usr/bin/xargs -iPCIID /bin/sh -c "/usr/bin/lspci -v -s PCIID" \
+    | /bin/grep Memory | /bin/sed -e 's/.*size=\([0-9]*\).*/\1/' \
+    | /usr/bin/sort -g | /usr/bin/tail -n1 \
+    | /usr/bin/xargs -iVIDEORAM /bin/sed -i -e 's/VIDEO_RAM/VIDEORAM/' /tmp/video_ram.reg
+    
+/usr/bin/regedit /tmp/video_ram.reg
+
+/usr/bin/wget http://howto.landure.fr/gnu-linux/installer-directx-9-0c-avec-wine/mscoree.dll \
+     --output-document=$HOME/.wine/drive_c/windows/system32/mscoree.dll
+/usr/bin/wget http://howto.landure.fr/gnu-linux/installer-directx-9-0c-avec-wine/streamci.dll \
+     --output-document=$HOME/.wine/drive_c/windows/system32/streamci.dll
+/usr/bin/wget http://howto.landure.fr/gnu-linux/installer-directx-9-0c-avec-wine/gm.dls \
+     --output-document=$HOME/.wine/drive_c/windows/system32/drivers/gm.dls    
+    
+ /usr/bin/wget http://howto.landure.fr/gnu-linux/installer-directx-9-0c-avec-wine/directx.reg \
+    --output-document /tmp/directx.reg
+/usr/bin/regedit /tmp/directx.reg   
+    
+
+/usr/bin/sudo /bin/cp /etc/sysctl.conf /etc/sysctl.conf.back
+/usr/bin/sudo /bin/sed -i -e 's/^\(vm.mmap_min_addr =\) .*/\1 0/' /etc/sysctl.conf
+/usr/bin/sudo /sbin/sysctl -p
+
+
+/usr/bin/wget http://howto.landure.fr/gnu-linux/installer-directx-9-0c-avec-wine/directx_mar2008_redist.exe \
+     --output-document=/tmp/directx_redist.exe
+     
+/bin/mkdir $HOME/.wine/drive_c/DIRECTX
+/usr/bin/cabextract -d $HOME/.wine/drive_c/DIRECTX /tmp/directx_redist.exe
+
+/usr/bin/wine "C:\DIRECTX\DXSETUP.exe"     
+
+
+==== Wine  ====
+<code>
+sudo apt-get install wine
+ls /usr/bin/wine*
+file /usr/bin/wine-development
+ls /usr/lib*/wine*/wineserver
+/usr/lib/wine-development/wineserver
+sudo ln -s /usr/bin/wine-development /usr/bin/wine
+export WINE=wine-development
+wine-development c:/windows/system32/msiexec.exe /i 3D选号器安装向导.msi
+wine start install.msi
+WINEDEBUG=-all game.exe
+wget http://winetricks.org/winetricks
+sudo chmod +x winetricks
+sh winetricks mfc42
+sh winetricks dotnet40 corefonts allfonts dotnet20 vcrun2010 vcredist
+// directx9 
+sh winetricks d3dx9 
+sh winetricks vcrun6sp6
+wget http://www.kegel.com/wine/winetricks
+sudo apt-get install cabextract
+chmod +x winetricks
+./winetricks
+
+</code>
+
+==== kills all wine processes ====
+
+  ls -l /proc/*/exe 2>/dev/null | grep -E 'wine(64)?-preloader|wineserver' | perl -pe 's;^.*/proc/(\d+)/exe.*$;$1;g;' | xargs -n 1 kill
+ 
+ 
+==== 彻底清理Wine   ====
+
+Wine environment reset
+
+Warning : THE FOLLOWING COMMAND LINES DELETE ALL OF YOUR WINE ENVIRONMENT. This include:
+
+    YOUR GAMES BACKUPS
+
+    YOUR GAMES INSTALLS
+
+    YOUR TRICKS
+
+EVERYTHING THAT NEED WINE OR IS ABOUT WINE.
+USE THESE COMMAND LINES AT YOUR OWN RISKS:
+
+rm -fr ~/.wine
+rm -r ~/.local/share/desktop-directories/wine-*
+rm -r ~/.config/menus/applications-merged/wine-*
+rm -r ~/.local/share/applications/wine/
+
+删除$HOME/.local/share/applications/mimeapps.list中含有wine的条目, 删除$HOME/.wine目录
+
+  find $HOME/.config -name '*wine*' -exec rm {} \;
+  find $HOME/.local -name '*wine*' -exec rm {} \;
+  find $HOME/.local -name '*wine*' -exec rm -r {} \;
+  rm -rf $HOME/.local/share/icons/hicolor
+  rm -f $HOME/.local/share/applications/mimeinfo.cache 
+ 
+==== Run *.exe files from a disk image [.ISO] ====
+
+  mkdir /media/games
+  sudo mount -o loop ~/file.iso /media/games
+  wine /media/games/Setup.exe
+  sudo umount /media/

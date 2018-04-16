@@ -1,0 +1,97 @@
+=== css ===
+
+Firefox's user interface can be modified by editing the userChrome.css and userContent. \\ 
+css files in ~/.mozilla/firefox/<profile_dir>/chrome/ (profile_dir is of the form hash.name, \\ 
+where the hash is an 8 character, seemingly random string and the profile name is usually default).
+Note: The chrome/ folder and userChrome.css/userContent.css files may not necessarily exist, \\ 
+so they may need to be created.
+
+
+== View config file ==
+about:support
+
+
+  cd ~/.mozilla/firefox/gupfzry5.default/chrome
+  nano userChrome.css  
+
+<code css>
+* {
+font-size : 14px !important ;
+}
+body {
+font-size : 14px !important ;
+}
+window {
+font-size : 14px !important ;
+}
+menubar, menubutton, menulist, menu, menuitem {
+font-size : 14px !important ;
+}
+menubar > menu {
+font-size : 14px !important ;
+}
+.tab-text {
+font-size : 14px !important ;
+}
+.menu-text {
+font-size : 14px !important ;
+}
+.toolbarbutton-text {
+font-size : 14px !important ;
+}
+#personal-bookmarks .toolbarbutton-icon {
+display : none !important ;
+}
+#bookmarks-ptf toolbarbutton {
+margin : 0 2px !important ;
+background-color : yellow;
+}
+.statusbarpanel-text {
+font-size : 14px !important ;
+}
+.ac-comment {
+font-size : 14px !important ;
+}
+.ac-url-text {
+font-size : 14px !important ;
+color : gray !important ;
+}
+#urlbar {
+font-family : Tahoma Bold !important ;
+color : black !important ;
+font-size : 11pt !important ;
+}
+.tabbrowser-tab[selected="true"] .tabs-bottom, [class="close-button tabs-closebutton"] {
+font-weight : bold !important ;
+background-color : rgb(220, 220, 220) !important ;
+padding-left : 2% !important ;
+padding-right : 2% !important ;
+}
+menuitem, menu, .splitmenu-menu, .splitmenu-menuitem {
+font-size : 14px !important ;
+}
+#urlbar, .urlbar-input-box, .searchbar-textbox {
+font-size : 14px !important ;
+font-family : Bitstream Vera Sans, "Ubuntu", Tahoma !important ;
+padding-bottom : 0 !important ;
+}
+.textbox-input-box.urlbar-input-box, #searchbar .textbox-input-box {
+font-size : 14px !important ;
+}
+.button-box .button-icon {
+display : none;
+}
+.tabbrowser-strip *[class^="scrollbutton"] {
+display : none;
+}
+.tabbrowser-strip *[class^="tabs-alltabs"] {
+display : none;
+}
+.tabbrowser-strip *[class^="tabs-newtab-button"] {
+display : none;
+}
+.tabbrowser-tabs {
+min-width : 20ex;
+}
+</code>  
+

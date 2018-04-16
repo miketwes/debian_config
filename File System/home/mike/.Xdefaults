@@ -1,0 +1,14 @@
+XTerm*cursorBlink: false
+XTerm*locale: true
+XTerm*faceName: DejaVu Sans Mono
+!xterm*font:     *-fixed-*-*-*-16-*
+XTerm*faceSize: 14
+
+XTerm*background: white
+XTerm*foreground: black
+XTerm*scrollbar: yes
+
+XTerm*VT100.Translations: #override \
+      Ctrl <KeyPress> V: insert-selection(CLIPBOARD,PRIMARY,CUT_BUFFER0) \n\
+      <BtnUp>: select-end(CLIPBOARD,PRIMARY,CUT_BUFFER0) \n\
+Ctrl <KeyPress> P: print() \n

@@ -1,0 +1,55 @@
+cp -R t1/. t2/ //Copy files from one directory into an existing directory
+
+
+Termux
+termux-setup-storage
+
+xclip
+ls -la | xclip
+alias xclip="xclip -selection c"
+echo test | xclip    
+Ctrl+v === test
+
+Bash For Loop Examples - nixCraft 
+ https://www.cyberciti.biz/faq/bash-for-loop/
+
+5 Bash for loop examples to make command line tasks more efficient | Benjamin Cane 
+ http://bencane.com/2013/10/21/5-bash-for-loop-examples-to-make-command-line-tasks-more-efficient/
+ 
+for i in (); do echo $i ; ls $i; done
+for i in {0..3}; do for j in {0..9}; do echo -n \($i, $j\); echo Is today the $i$j \?; done; done
+for i in */; do (cd “$i” && git fetch) done
+ 
+for i in *; do echo $i; done [ will not show files with leading dash ]
+
+for i in “*”; do echo $i; done [ will show files with leading dash (but not one file per line) ]
+for i in /etc/*.conf; do cp $i /backup; done
+
+ for((i=1;i<=10;i+=2)); do echo "Welcome $i times"; done
+ 
+Generate md5 checksum for all files in a directory
+
+md5sum * > checklist.chk  # generates a list of checksums for any file that matches *
+md5sum -c checklist.chk   # runs through the list to check them
+find -exec md5sum "{}" \; > checklist.chk
+find ./backup -type f -print0 | xargs -0 md5sum > checklist.chk
+
+
+alias find-opera-1M='find ~/.opera/cache*/ -cmin -50 -size +1000k -exec echo "----------" \; -exec ls -l {} \; -exec file {} \;'
+alias find-opera-swf='find ~/.opera/cache*/ -cmin -30 -printf ========\\v\\r%p\\t\\t►%kK\\t►%AH:%AM\\v\\r -exec file {} \; |g "Flash"'
+
+
+Remove duplicate entries using a Bash script
+
+  sort -u input.txt
+
+  awk '!a[$0]++' input.txt
+
+
+
+python -m SimpleHTTPServe
+aria2c  --enable-rpc=true --conf-path=/home/mike/.aria2/aria2.conf
+http://0.0.0.0:8000/ari/  setup connetsetup input token in .aria2/aria2.conf
+sudo /etc/init.d/miredo start
+source ~/.bashrc
+dpkg -l | grep wiki

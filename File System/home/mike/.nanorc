@@ -1,0 +1,3 @@
+set quiet
+syntax "disabled" "."
+color black "."

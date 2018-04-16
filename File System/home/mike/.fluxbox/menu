@@ -1,0 +1,73 @@
+[begin] (Fluxbox)
+
+[exec] (Screensaver) {xset s 10 600} <>
+[exec] (Screensaver stop) {xset s off} <>
+[exec] (Goagent stop) {sudo pkill python} <>
+[exec] (xxnet) {cd soft/xnet2 && ./start -hungup} <>
+[exec] (goagent) {cd soft/goagent/local && python2.7 proxy.py} <>
+[exec] (chrome) {google-chrome-unstable} <>
+[exec] (ADSL) {pon} <>
+[exec] (ADSL stop) {sudo poff -a} <>
+[exec] (bt) {qbittorrent --style=gtk3} <>
+[exec] (sqlite) {sqlitebrowser --style=gtk+} <>
+[exec] (amule) {amule} <>
+[exec] (gftp) {gftp} <>
+[exec] (qqlite) {wine-development /home/mike/.wine/drive_c/Program*/Tencent/QQLite/Bin/QQ.exe} <>
+
+[submenu] (Science)
+[exec] (sage jupyter) {/home/mike/soft/SageMath/sage -n jupyter} <>  
+[exec] (retext) {export QT_SCALE_FACTOR=1.5 && retext} <>  
+[exec] (qt) {soft/qt/Tools/QtCreator/bin/qtcreator -style gtk} <>
+[exec] (php vclove) {php -S 0.0.0.0:8080 -t project/vclove} <>
+[exec] (pyquake) {cd t/24/project/pyquake && python3.6 kgd.py} <>
+[exec] (kjh) {cd t/24project/3dkgd && python3.6 kgd.py} <>
+[exec] (k3) {cd /home/mike/t/3dproject/gsk3  && python3.6 gsk3_gui.py} <>
+[exec] (3d) {cd t/3dproject && python3.6 *.py} <>
+[exec] (kgd) {/home/mike/soft/KGD} <>
+[exec] (k php) {sudo pkill php} <>
+[end]
+
+[submenu] (Multimedia)
+[exec] (mute_unmute) {amixer -q sset Master toggle} <>
+[exec] (flash) {flashplayerdebugger} <>
+[exec] (mplayer) {mplayer} <>
+[exec] (deadbeef) {deadbeef} <>
+[exec] (pic) {wine-development soft/iranview/i_view32.exe} <>
+[exec] (Now) {scrot '%Y-%m-%d_$wx$h.png' -s -e 'mv $f ~/Downloads/'}
+[exec] (wps) {soft/wps/wps} <>
+[exec] (foxit) {fox} <>
+[end]
+
+[submenu] (Game)
+[exec] (UT4.3) {soft/UrbanTerror43/UrbanTerror43/Quake3-UrT.i386} <>
+[exec] (AstroMenace) {AstroMenace} <>
+[exec] (gmchess) {gmchess} <>
+[exec] (pvz) {cd ~/.wine/drive_c/Program\ Files/PlantsvsZombies/Plants\ vs.\ Zombies && wine-development PlantsVsZombies.exe} <>
+[exec] (Road Rash) {wine-development soft/rr/*.exe} <>
+[exec] (xboard) {xboard -fcp maxqi -scp maxqi -size 60,0 -ubt true  -lbtf ~~/themes/textures/xqboard-9x10.png -dbtf ~~/themes/textures/xqboard-9x10.png -pid ~~/themes/xiangqi -trueColors true -overrideLineGap 0} <>
+[exec] (quake1) {darkplaces -basedir /home/mike/soft/quake} <>
+[exec] (pvzdev) {cd /home/mike/soft/*Zombies/  &&  wine-development PlantsVsZombies.exe -changedir} <>
+[exec] (Nfs2) {cd soft/nfs2 && wine-development nfshp2.exe} <>
+[exec] (supertuxkart) {/home/mike/soft/supertuxkart-0.9.2-linux/run*} <>
+[exec] (Extreme Tux Racer) {/home/mike/soft/etr} <>
+[end]
+
+[submenu] (Wallpaper)
+[exec] (Bliss) {fbsetbg -f /home/mike/t/desk/Bliss.bmp}
+
+[exec] (Bliss1) {fbsetbg -C /home/mike/t/cartoondesk/$(ls /home/mike/t/cartoondesk | sort -R | tail -1)}
+
+[end]
+
+[submenu] (Styles)
+[stylesdir] (/usr/share/fluxbox/styles)
+[stylesdir] (~/.fluxbox/styles)
+[end]
+
+[exec] (synaptic) {sudo synaptic} <>
+[exec] (shutdown) {sudo shutdown -h now} <>
+[reconfig] (Reconfigure)
+[exec] (reboot) {sudo reboot --reboot} <>
+[exit] (Exit)
+
+[end]

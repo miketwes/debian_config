@@ -1,0 +1,129 @@
+# This is an automatically generated file.
+# Please see <file:/usr/share/doc/menu/README> for information.
+
+# to use your own menu, copy this to ~/.fluxbox/menu, then edit
+# ~/.fluxbox/init and change the session.menuFile path to ~/.fluxbox/menu
+
+[begin] (Fluxbox)
+
+# Automatically generated file. Do not edit (see /usr/share/doc/menu/html/index.html)
+
+   [submenu] (Applications) {}
+      [submenu] (Accessibility) {}
+         [exec] (Xmag) {xmag} <>
+      [end]
+      [submenu] (Editors) {}
+         [exec] (Xedit) {xedit} <>
+      [end]
+      [submenu] (Graphics) {}
+         [exec] (X Window Snapshot) {xwd | xwud} <>
+      [end]
+      [submenu] (Network) {}
+         [submenu] (Communication) {}
+            [exec] (weechat) { x-terminal-emulator -T "weechat" -e /usr/bin/weechat} </usr/share/pixmaps/weechat.xpm>
+            [exec] (Xbiff) {xbiff} <>
+         [end]
+         [submenu] (File Transfer) {}
+            [exec] (amule) {/usr/bin/amule} </usr/share/pixmaps/amule.xpm>
+         [end]
+         [submenu] (Web Browsing) {}
+            [exec] (Google Chrome (unstable\)) {/opt/google/chrome-unstable/google-chrome-unstable} </opt/google/chrome-unstable/product_logo_32.xpm>
+         [end]
+      [end]
+      [submenu] (Programming) {}
+         [exec] (Tclsh8.6) { x-terminal-emulator -T "Tclsh8.6" -e /usr/bin/tclsh8.6} <>
+         [exec] (TkWish8.6) {x-terminal-emulator -e /usr/bin/wish8.6} <>
+      [end]
+      [submenu] (Science) {}
+         [submenu] (Mathematics) {}
+            [exec] (Bc) { x-terminal-emulator -T "Bc" -e /usr/bin/bc} <>
+            [exec] (Xcalc) {xcalc} <>
+         [end]
+      [end]
+      [submenu] (Shells) {}
+         [exec] (Bash) { x-terminal-emulator -T "Bash" -e /bin/bash --login} <>
+         [exec] (Dash) { x-terminal-emulator -T "Dash" -e /bin/dash -i} <>
+         [exec] (Sh) { x-terminal-emulator -T "Sh" -e /bin/sh --login} <>
+      [end]
+      [submenu] (Sound) {}
+         [exec] (aumix) { x-terminal-emulator -T "aumix" -e /usr/bin/aumix} </usr/share/pixmaps/aumix.xpm>
+      [end]
+      [submenu] (System) {}
+         [submenu] (Administration) {}
+            [exec] (Debian Task selector) { x-terminal-emulator -T "Debian Task selector" -e su-to-root -c tasksel} <>
+            [exec] (Editres) {editres} <>
+            [exec] (Orphaner (all\)) { x-terminal-emulator -T "Orphaner (all)" -e su-to-root -c '/usr/sbin/orphaner -a'} <>
+            [exec] (Orphaner - editkeep) { x-terminal-emulator -T "Orphaner - editkeep" -e su-to-root -c '/usr/sbin/editkeep'} <>
+            [exec] (Orphaner (libs\)) { x-terminal-emulator -T "Orphaner (libs)" -e su-to-root -c /usr/sbin/orphaner} <>
+            [exec] (Xclipboard) {xclipboard} <>
+            [exec] (Xfontsel) {xfontsel} <>
+            [exec] (Xkill) {xkill} <>
+            [exec] (Xrefresh) {xrefresh} <>
+         [end]
+         [submenu] (Hardware) {}
+            [exec] (Xvidtune) {xvidtune} <>
+         [end]
+         [submenu] (Monitoring) {}
+            [exec] (Pstree) { x-terminal-emulator -T "Pstree" -e /usr/bin/pstree.x11} </usr/share/pixmaps/pstree16.xpm>
+            [exec] (Top) { x-terminal-emulator -T "Top" -e /usr/bin/top} <>
+            [exec] (Xconsole) {xconsole -file /dev/xconsole} <>
+            [exec] (Xev) {x-terminal-emulator -e xev} <>
+            [exec] (Xload) {xload} <>
+         [end]
+         [submenu] (Package Management) {}
+            [exec] (Aptitude Package Manager (text\)) { x-terminal-emulator -T "Aptitude Package Manager (text)" -e /usr/bin/aptitude-curses} <>
+         [end]
+      [end]
+      [submenu] (TV and Radio) {}
+         [exec] (xawtv) {/usr/bin/xawtv} <>
+      [end]
+      [submenu] (Viewers) {}
+         [exec] (Xditview) {xditview} <>
+      [end]
+   [end]
+   [submenu] (CrossOver) {}
+      [exec] (CrossOver) {/opt/cxoffice/bin/crossover} </opt/cxoffice/share/icons/32x32/crossover.png>
+      [exec] (Uninstall CrossOver Linux) {/opt/cxoffice/bin/cxuninstall} </opt/cxoffice/share/icons/32x32/cxuninstall.png>
+   [end]
+   [submenu] (Games) {}
+      [submenu] (Action) {}
+         [exec] (PacMan) {/usr/games/pacman} </usr/share/pixmaps/pacmania.xpm>
+      [end]
+      [submenu] (Board) {}
+         [exec] (Chess Net) { x-terminal-emulator -T "Chess Net" -e /usr/games/xboard -ics -icshost chess.net} </usr/share/pixmaps/xboard.xpm>
+         [exec] (Default) { x-terminal-emulator -T "Default" -e /usr/games/xboard -ics} </usr/share/pixmaps/xboard.xpm>
+         [exec] (Free I.C.S.) { x-terminal-emulator -T "Free I.C.S." -e /usr/games/xboard -ics -icshost freechess.org} </usr/share/pixmaps/xboard.xpm>
+         [exec] (Internet Chess Club) { x-terminal-emulator -T "Internet Chess Club" -e /usr/games/xboard -ics -icshost chessclub.com} </usr/share/pixmaps/xboard.xpm>
+         [exec] (XBoard) {/usr/games/xboard -xncp} </usr/share/pixmaps/xboard.xpm>
+         [exec] (XBoard (passive chessboard\)) {/usr/games/xboard -ncp} </usr/share/pixmaps/xboard.xpm>
+      [end]
+      [submenu] (Toys) {}
+         [exec] (Oclock) {oclock} <>
+         [exec] (Xclock (analog\)) {xclock -analog} <>
+         [exec] (Xclock (digital\)) {xclock -digital -update 1} <>
+         [exec] (Xeyes) {xeyes} <>
+         [exec] (Xlogo) {xlogo} <>
+      [end]
+   [end]
+   [submenu] (Help) {}
+      [exec] (Info) { x-terminal-emulator -T "Info" -e info} <>
+      [exec] (Xman) {xman} <>
+   [end]
+   [submenu] (Window Managers) {}
+      [restart] (FluxBox)  {/usr/bin/startfluxbox}
+   [end]
+   [submenu] (Windows Applications) {}
+      [exec] (cpzyrjcom) {"/home/mike/.cxoffice/1/desktopdata/cxmenu/StartMenu.C^5E3A_users_crossover_Start^2BMenu/cpzyrjcom.lnk"} </home/mike/.cxoffice/1/windata/cxmenu/icons/hicolor/32x32/apps/5D76_cpzyrjcom.0.png>
+   [end]
+
+   [config] (Configuration)
+   [submenu] (Styles) {}
+      [stylesdir] (/usr/share/fluxbox/styles)
+      [stylesdir] (~/.fluxbox/styles)
+   [end]
+   [workspaces] (Workspaces)
+   [reconfig] (Reconfigure)
+   [restart] (Restart)
+   [exit] (Exit)
+
+[end]

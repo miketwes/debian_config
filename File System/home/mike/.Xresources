@@ -1,0 +1,9 @@
+xterm*vt100.initialFont: 5
+xTerm*locale: true
+xterm*Background:               white
+xterm*Foreground:               black
+xterm*cursorColor:              black
+xterm*pointerShape:             arrow
+xterm*pointerColor:             black
+
+

@@ -1,0 +1,36 @@
+! The following line will prevent styles from setting the background. background: aspect
+! background: none background.pixmap:  /home/mike/t/desk/Bliss.bmp
+
+background: centered
+background.pixmap:  /home/mike/t/desk/Bliss.bmp
+
+############################################################## FONTS ##########
+
+#menu.title.font: WenQuanYi Bitmap Song-14
+#menu.title.justify: center
+#menu.frame.font: WenQuanYi Bitmap Song-14
+#window.font: WenQuanYi Bitmap Song-14
+
+
+#menu.frame.font: sans-16
+#menu.title.font: sans-16
+#menu.title.justify: center
+
+#window.font: sans-12
+
+############################################################## MENU ###########
+#menu.bevelWidth: 3
+#menu.borderWidth: 3
+#menu.itemHeight:   22
+
+#window.justify:                      center 
+
+#window.font:  WenQuanYi Zen Hei-12
+
+#menu.title.font: WenQuanYi Micro Hei-16
+#menu.frame.font: WenQuanYi Zen Hei-16
+
+
+
+
+#*font: WenQuanYi Zen Hei-16

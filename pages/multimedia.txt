@@ -1,0 +1,398 @@
+
+Graphics
+
+
+feh qeeqie imagemagick gimp inkscape 
+
+Imagemagick
+convert -strip -interlace Plane -gaussian-blur 0.05 -quality 85% source.jpg result.jpg
+du -h image_compressed.jpg
+convert -quality 50 1.jpg image_compressed.jpg
+convert -resize 80%x80%  1.png n.png
+
+# Gs rotation view:
+gs -dEPSCrop -c "<</Orientation 3>> setpagedevice" -f file.ps -c quit
+
+scrot // (SCReen shOT)  commandline screen capture utility 
+scrot '%Y-%m-%d_$wx$h.png' -s -e 'mv $f ~/download/'
+Ubuntu下截图设置 http://hi.baidu.com/icexile/item/473d9ed3e62a674efb5768b3
+　　会附带安装上giblib1 libimlib2两个包，安装完成之后，
+在shell中执行就自动截下当前全屏的图，并保存在用户home目录了，先看一下常用参数：
+  -b 截取窗口时保存带窗口边框的图片
+　　-d n 延迟n秒截图
+　　-c 配合上一个参数使用，显示延迟倒计时
+　　-e app 截图之后对所截图片$f执行app操作
+　　-q 75/100 设置图像精度，默认75，最大100，不过一般用png图片格式的时候应该用不到了
+　　-s 手动选择截图区域或者窗口
+
+图像查看器 http://burnyfox.hostzi.com/?p=508 by alan
+
+xfce自带了一个图像查看器Ristretto，一直觉得看图不清晰，
+同样的png图片在firefox下显示清楚多了，用Ristretto看总觉得雾蒙蒙的。
+今天试了下别的看图软件GpicView和mcomix，同样比Ristretto清晰，跟firefox一样；
+看了下Ristretto也没有相关设置项，干脆卸载换掉。不过Comix不支持动态gif，
+把GpicView和mcomix都装上了，GpicView对付gif和临时看图，mcomix看漫画之类的多图。
+今天发现gpicview有个bug，就是打开一张大图选择原比例显示后不能滚动，
+缩小或者放大一点就可以了，换成gthumb了。
+更新：又换了，gthumb打开太慢了，试了下mirage、geeqie、gqview、feh、sxiv和qiv，
+都不满意，大部分不支持gif动态图，mirage倒是支持gif但是在我这也很慢。最后试了下eog，
+简单、快、支持gif、快捷键方便，就它了。
+
+
+
+Build  Deadbeef
+________________
+
+sudo aptitude install build-essential subversion git-core yasm \
+intltool libgtk-3-dev libgtk2.0-dev automake libtool libzip-dev \
+libgpac-dev libdirac-dev libgsm1-dev libschroedinger-dev \
+libspeex-dev libvorbis-dev libopenjpeg-dev libdc1394-22-dev \
+libsdl1.2-dev zlib1g-dev texi2html libfaac-dev libfaad-dev \
+libmp3lame-dev libtheora-dev  libopencore-amrnb-dev \
+libopencore-amrwb-dev libvpx-dev libfreetype6-dev \
+frei0r-plugins-dev librtmp-dev libaacplus-dev libx264-dev \
+libavdevice-dev libavfilter-dev libavformat-dev libavutil-dev \
+libxvidcore-dev libasound2-dev libpulse-dev libmad0-dev \
+libwavpack-dev libsndfile1-dev libcdio-dev libcddb2-dev \
+libsamplerate0-dev  libavformat-dev libcurl4-gnutls-dev \
+libdbus-1-dev libfaad-dev libimlib2-dev libmpg123-dev libasound2-dev  \
+libavcodec-dev libgtk-3-dev libjansson-dev libvdpau-dev libvdpau1 libvdpau-va-gl1
+
+dpkg -i libmac2_3.99-u4-b5-dmo1_i386.deb
+git clone https://github.com/Alexey-Yakovenko/deadbeef.git -b master soft/deadbeef
+cd deadbeef
+./autogen.sh
+./configure
+
+Deadbeef has no sound 
+rm -rf .config/deadbeef
+
+
+Flashplayer stand alone install 
+_____________________
+
+
+sudo aptitude install libnss3-1d
+wget -c http://fpdownload.macromedia.com/pub/flashplayer/updaters/11/flashplayer_11_sa_debug.i386.tar.gz
+tar xzf flashplayer_11_sa_debug.i386.tar.gz
+sudo mkdir -p /usr/lib/flashplayer
+sudo mv flashplayerdebugger /usr/lib/flashplayer/flashplayerdebugger
+sudo rm -rf /usr/bin/flashplayerdebugger
+sudo ln -s /usr/lib/flashplayer/flashplayerdebugger /usr/bin/flashplayerdebugger
+echo "[Desktop Entry]
+	Name=Flash Player Debugger
+ 	Exec=/usr/lib/flashplayer/flashplayerdebugger %U
+ 	MimeType=application/swf-flash;application/x-shockwave-flash;
+	Terminal=false
+	Type=Application
+	Categories=GTK;GNOME;AudioVideo;Player;Video;" > flashplayerdebugger.desktop
+sudo mv flashplayerdebugger.desktop /usr/share/applications/flashplayerdebugger.desktop
+sudo update-desktop-database
+flashplayerdebugger  
+
+Sound
+_____________________
+
+Adjust microphone
+^^^^^^^^^^^^^^^^^^^^
+
+cat /proc/asound/cards
+arecord -l
+
+arecord -d 10 test.wav
+aplay test.wav
+
+alsamixer
+amixer set Capture 5%-
+
+sudo aptitude install aumix 
+
+amixer set 'Rear Mic' 90% mute cap
+amixer set 'Rear Mic Boost' 80%
+amixer sget 'Input Source'
+Simple mixer control 'Input Source',0
+  Capabilities: cenum
+  Items: 'Front Mic' 'Rear Mic' 'Line' 'CD' 'Mix'
+  Item0: 'Front Mic'
+  
+amixer -c0 cset iface=MIXER,name='Input Source',index=1 'Front Mic' 
+# (Record from Front Mic)
+ 
+slightly modified according to my sound-card and setup 
+(default sound-card, different items ordering) :
+
+amixer cset name='Input Source',index=0 'Rear Mic'           
+ 
+ 
+Set volume from terminal
+
+http://unix.stackexchange.com/questions/32206/set-volume-from-terminal
+For interactive usage you can use alsamixer. For scripting (e.g. binding to key combinations) take a look at amixer.
+
+alsamixer is included by default in most systems.
+
+To set the master volume use:
+
+# Gets a list of simple mixer controls
+$ amixer scontrols 
+Then set it to the desired volume, as an example
+
+$ amixer sset 'Master' 50%
+
+# increase by 3%
+amixer -q sset Master 3%+
+
+# decrease by 3%
+amixer -q sset Master 3%-
+
+# mute/unmute
+amixer -q sset Master toggle
+
+pamixer 
+ 
+ 
+        
+has no sound
+^^^^^^^^^^^^^^
+ sudo aptitude install alsa-base
+ sudo alsa force-reload
+ 
+SMPlayer not playing any sound
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+go to the preferences (Ctrl+P), audio tab and changed the output 
+controller from 'pulse' to 'alsa'
+
+http://askubuntu.com/questions/225445/smplayer-not-playing-any-sound 
+
+
+
+mplayer libdvdnavmini.so.4 not find
+sudo mv /usr/lib/i386-linux-gnu/libdvdnav.so.4 /usr/lib/i386-linux-gnu/libdvdnavmini.so.4
+
+
+摄像头测试软件webcam spcaview luvcview xawtv 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+GuvcViewer视频捕获软件是Linux平台上一款不可多得的视频捕捉程序,可以抓拍或录制视频
+sudo aptitude install guvcviewer
+sudo aptitude install xawtv
+uvcvideo的模块
+Linux UVC网站 http://www.ideasonboard.org/uvc/ 中有一个支持的设备列表，lsusb -v | grep ID
+
+
+
+combine video files into one file
+
+merge flv files
+ffmpeg -f concat -i 100.txt -c copy 100.flv
+
+100.txt
+file '1.flv'
+file '2.flv'
+
+
+
+mencoder -forceidx -of lavf -oac pcm -ovc copy -o output.flv 01.flv 02.flv 03.flv 04.flv
+mencoder -ovc lavc -lavcopts vcodec=mpeg4 -oac mp3lame 0.flv 1.flv（有几个写几个）-o  目标名.avi
+mencoder part1.flv part2.flv part3.flv -o all.flv -ovc copy -oac copy -of lavf -lavfopts format=flv   
+
+mencoder 0300081300536D5C2DAAC2068C478A4C1F5CB1-7616-0784-E0FD-E87643B3C042.mp4 \
+0300081301536D5C2DAAC2068C478A4C1F5CB1-7616-0784-E0FD-E87643B3C042.mp4 \
+0300081312536D5C2DAAC2068C478A4C1F5CB1-7616-0784-E0FD-E87643B3C042.mp4 -oac pcm -ovc copy -o output.mp4
+
+mencoder -forceidx -of lavf -oac pcm -ovc copy -o output1.flv 030001140052A54EE4A912068C478A83B5AFC2-95D0-32F7-7A91-21A7999261F4.flv \
+030001140152A54EE4A912068C478A83B5AFC2-95D0-32F7-7A91-21A7999261F4.flv \
+030001141252A54EE4A912068C478A83B5AFC2-95D0-32F7-7A91-21A7999261F4.flv \
+030001141352A54EE4A912068C478A83B5AFC2-95D0-32F7-7A91-21A7999261F4.flv
+
+
+
+ 
+extract audio from flv adn f4v to mp3
+ 
+sudo aptitude install avidemux vlc smplayer   
+ 
+
+
+
+http://www.cnblogs.com/canmusic/archive/2012/10/09/2717428.html
+
+视频文件处理命令行点滴
+1. 视频文件截图
+
+ffmpeg.exe -i "c:\test.mp4" -f image2 -ss 8 -vframes 1 -y "c:\test.bmp"
+
+-i 表示输入文件
+
+-f 表示输出文件格式
+
+-ss 表示截取第几秒的画面
+
+-vframes 表示截图的帧数
+
+-y 表示覆盖保存输出文件
+
+最后一个参数是ffmpeg的输出文件
+
+2. 获取视频文件播放时间以及分辨率等信息
+
+ffmpeg.exe -i "c:\test.avi"
+
+3. 获取MP4文件信息
+
+mp4box.exe "c:\test.mp4" -info
+
+4. F4V转MP4
+
+f4vpp.exe -i "c:\test.f4v" -o "c:\new.mp4" -v -f
+
+-i 输入文件
+
+-o 输出文件
+
+-v 显示转换过程
+
+-f 覆盖保存输出文件
+
+ffmpeg.exe -i "c:\test.f4v" -y -codec copy "c:\new.mp4"
+
+-codec copy 表示保留原有视频编码信息不变进行转换
+
+5. MP4文件合并
+
+mp4box.exe -force-cat -cat "c:\a.mp4" -cat "c:\b.mp4" -cat "c:\c.mp4" -new "c:\output.mp4"
+
+-force-cat 表示强制合并操作（mp4合并文件中的视频和音频信息需要相同，否则会有问题）
+
+-new 覆盖保存输出文件
+
+6. 按固定时间长度分割MP4文件
+
+mp4box.exe -split 60 "c:\test.mp4"
+
+单位（秒），一分钟一个MP4文件进行分割
+
+输出文件自动保存在输入文件相同的目录下
+
+7. 按固定文件大小分割MP4文件
+
+mp4box.exe -splits 1024 "c:\test.mp4"
+
+单位（KB），1MB一个MP4文件进行分割
+
+最大分割大小为600MB
+
+8. 按时间段截取MP4文件
+
+mp4box.exe -splitx 0:64 "c:\test.mp4"
+
+单位（秒），从第0秒到第64秒截取MP4文件
+
+ 
+
+相关工具下载地址：
+
+ffmpeg：http://www.ffmpeg.org/download.html
+
+mp4box：http://gpac.wp.mines-telecom.fr/
+
+f4vpp：http://www.adobe.com/go/fms_tools_samples/
+
+
+
+mplayer -vo null -ao null -frames 0 -identify 0002-墙头记.flv
+
+
+Concatenate two mp4 files using ffmpeg
+http://stackoverflow.com/questions/7333232/concatenate-two-mp4-files-using-ffmpeg
+
+concat demuxer
+
+$ cat mylist.txt
+file '/path/to/file1'
+file '/path/to/file2'
+file '/path/to/file3'
+
+$ ffmpeg -f concat -i mylist.txt -c copy output
+
+Joining H264 *without* re-encoding
+http://superuser.com/questions/133413/joining-h264-without-re-encoding
+
+么把H264编码的F4V文件不重新编码封装成MP4文件？
+http://zhidao.baidu.com/question/222520176.html
+ffmpeg -i 输入文件.f4v -vcodec copy -acodec copy 输出文件.mp4
+
+
+土豆网下载的f4v无损转AAC无损转换M4A格式
+http://sulisu.wordpress.com/2011/04/16/%E5%9C%9F%E8%B1%86%E7%BD%91%E4%B8%8B%E8%BD%BD%E7%9A%84f4v%E6%97%A0%E6%8D%9F%E8%BD%ACaac%E6%97%A0%E6%8D%9F%E8%BD%AC%E6%8D%A2m4a%E6%A0%BC%E5%BC%8F/
+
+
+http://deadshot.googlecode.com/files/FlashVideoCat-dll.zip
+
+
+
+http://cubeman.org/linuxnotes.txt                       
+
+
+
+Converting RAW files to JPGs
+
+
+exiftool -fileOrder DateTimeOriginal -b -previewImage -w  <name>.jpg -ext CR2  <CR2's location>
+
+#!/usr/bin/python
+# -*- coding: utf8 -*-
+import os
+
+# Grab all files inside subdirectories within the current directory 
+search_files ="find . -name *.CR2"
+
+# Loop through all found files
+for source_file in os.popen (search_files):
+  # Remove \n at end of found files
+  source_file = source_file[:-1]
+  
+  print "Processing file " + source_file
+  
+  os.popen ("ufraw-batch --wb=camera --exposure=auto --out-type=jpeg --compression=96 --out-path=./processed_images " + source_file )
+  
+find . -type f -name '*.CR2' -print0 | while read -rd ''; do
+  something-with "$REPLY"
+done
+
+raw_convert()
+{
+if [ ! -d ./processed_images ]; then mkdir ./processed_images; fi;
+
+# processes raw files
+for f in *.CR2;
+do
+	echo "Processing $f"
+	ufraw-batch \
+		--wb=camera \
+		--exposure=auto \
+		--out-type=jpeg \
+		--compression=96 \
+		--out-path=./processed_images \
+		$f
+done
+
+cd ./processed_images
+
+# change the image names
+for i in *.jpg;
+do
+	mv "$i" "${i/.jpg}"_r.jpg;
+done
+for i in *.jpg;
+do
+	mv "$i" "${i/imgp/_igp}";
+done
+}
+
+
+
+sudo aptitude install bchunk
+bchunk cpy-pvszgoty.bin cpy-pvszgoty.cue cpy-pvszgoty.iso
+sudo mount -t iso9660 -o loop,user cpy-pvszgoty.iso01.iso /mnt/cdrom
+cd /mnt/cdrom
+sudo umount /mnt/cdrom

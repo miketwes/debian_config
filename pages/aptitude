@@ -1,0 +1,93 @@
+wget snapshot.debian.org
+nano index.html
+echo "deb http://snapshot.debian.org/archive/debian/20180405 sid main" >> /etc/apt/sources.list
+nano /etc/apt/sources.list
+aptitude update
+
+man apt-cache
+sudo apt-cache madison libglib2.0-0
+sudo apt-cache policy libglib2.0-0
+sudo aptitude versions libglib2.0-0
+sudo apt-cache show  libglib2.0-0
+dpkg -l libglib2.0-0
+
+apt-cache showpkg libglib2.0-0
+aptitude purge libglib2.0-dev
+aptitude install libglib2.0-0=2.56.0-4
+
+dpkg -l | grep libglib2.0
+sudo apt-cache search libglib2.0-0
+
+/etc/init.d/networking start
+shutdown -h now
+
+ls /var/lib/dpkg/info/cross*
+sudo rm /var/lib/dpkg/info/cross*
+sudo aptitude purge crossover
+
+
+
+aptitude与apt-get常用选项
+
+
+=========================================
+aptitude 
+=========================================
+
+aptitude search "" #查找软件包
+aptitude show ""   #显示包的详细信息
+aptitude install ""  #安装包
+aptitude remove ""   #删除包
+aptitude pruge ""    #删除包及其配置文件
+aptitude hold ""  #禁止更新
+aptitude keep ""
+aptitude unhold ""
+aptitude reinstall "" #再安装
+aptitude markauto "" #
+aptitude unmarkauto ""
+aptitude update     #更新可用的包列表
+根据/etc/apt/sources.list的信息，获取软件包列表的更新，不更新软件
+aptitude upgrade  #升级可用的包
+aptitude safe-upgrade 
+如果已安装的软件有最新版，则安装。一般在aptitude update之后执行
+aptitude full-upgrade
+
+aptitude clean       #删除下载的包文件
+aptitude autoclean   #仅删除过期的包文件
+
+aptitude download ""
+下载deb格式的安装包，但不安装
+
+aptitude help
+
+aptitude命令的日志文件 ： /var/log/aptitude 
+
+
+=========================================
+apt-get
+=========================================
+apt-get update              #更新软件包列表
+apt-get install ""          #安装一个新软件包
+apt-get remove  ""          #卸载一个已安装的软件包（保留配置文档）
+apt-get remove --purge ""   #卸载一个已安装的软件包（删除配置文档）
+apt-get autoremove ""       #删除包及其依赖的软件包
+apt-get autoremove --purge ""  #删除包及其依赖的软件包+配置文件，比上面的要删除的彻底一点
+apt-get autoclean  #apt会把已装或已卸的软件都备份在硬盘上，所以假如需要空间的话，能够让这个命令来删除您已卸载掉的软件的备份。
+apt-get clean  #这个命令会把安装的软件的备份也删除，但是这样不会影响软件的使用。
+apt-get upgrade       #更新软件包
+apt-get dist-upgrade  #将系统升级到新版本
+apt-cache search ""   #在软件包列表中搜索字符串
+apt-cache show   ""   #获取包的相关信息，如说明、大小、版本等
+
+
+让debian自动寻找最快的更新源
+
+apt-spy -d stable -a asia -t 5"。
+
+其中-d选项指定发行版本，可选项为"stable、testing、unstable”。unstable为非稳定版，stable为稳定版，建议选择stable。
+
+-a选项指定debian安装源服务器的区域，如asia、Europe、North-America。asia为亚洲，建议选择此项。
+
+-t为超时阈值。设置较小的值可以忽略较慢的服务器。为了选择较小的服务器，可以选择一个比较小的值。
+
+命令完成后，apt-spy自动创建/etc/apt/sources.list.d文件夹，并在该文件夹里面创建apt-spy.list文件。

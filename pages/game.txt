@@ -1,0 +1,58 @@
+===== Game =====
+
+==== UrbanTerror ====
+
+  sudo aptitude install libqt4-network libsdl1.2-dev       
+  https://up.barbatos.fr/urt/
+  http://mirror.urtstats.net/urbanterror/
+  
+  
+==== Quake 1 ====
+
+Link to download Quake 1 Files: https://mega.co.nz/#!NEViWJLB!r4Refl08lTFXYqY-qhp8oBBIQX36SXgjesy6_wIR4JQ
+#Link to download Quake 1 Client: http://quakeone.com
+
+  sudo aptitude install darkplaces
+  [exec] (quake1) {darkplaces -basedir /home/mike/soft/quake} <>
+
+
+==== Plant Vs Zombie ====
+
+"invalid command line parameter: -changedir" 
+
+add parameter -changedir after pvz.exe
+
+  vi /home/mike/soft/*Zombies/userdata/user1.dat
+
+  :%!xxd
+  :%!xxd -r
+
+    00000000: 0c00 0000 0700 0000 6200 0000 0100 0000  ........b.......
+    00000000: 0c00 0000 0700 0000 6fff f000 0100 0000  ........b.......
+
+
+==== Road\ Rash  ====
+
+    *1.Install wine-development
+    
+        sudo aptitude purge wine
+        rm -rf    $HOME/.wine
+        sudo aptitude install wine-development
+
+    *2.Download Road Rash 
+
+         https://kat.cr/road-rash-t1890054.html
+
+    *3.Install Road Rash
+
+        wine-development Road\ Rash.exe
+
+
+    *4.Edit registry, go to [HKEY_LOCAL_MACHINE\Software\Electronic Arts\RoadRash 95] change "Path"="C:\\somepath" to "Path"="C:\\yourpath"
+
+        regedit-development
+
+
+==== 极品飞车热力追踪2的CD-key  ====
+
+    AVJ-XDTL-MSCJ-VPGJ

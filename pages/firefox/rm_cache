@@ -1,0 +1,18 @@
+ rm ~/.mozilla/firefox/*.default/cookies.sqlite
+ rm ~/.mozilla/firefox/*.default/*.sqlite 
+ 
+ cd ~/.mozilla/firefox/*default/*sessions*
+ rm recovery.jsonlz4
+ rm -r ~/.cache/mozilla/firefox/*.default/*   
+ 
+ cd ~/.cache/thumbnails
+ rm -rf normal
+ mkdir normal
+
+<code bash>
+#!/bin/bash
+echo "shredding cache"
+find ~/.cache/thumbnails -type f -name "*.png" -exec shred -f -u -z -n 1 {} \;
+echo "finished shredding" 
+</code>
+ 

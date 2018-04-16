@@ -1,0 +1,32 @@
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+#iface lo inet6 loopback
+
+#PPPoE connection
+#auto provider
+#iface provider inet ppp
+#	pre-up /sbin/ifconfig eth0 up
+#	provider provider
+
+#auto dsl-provider
+#iface dsl-provider inet ppp
+#pre-up /bin/ip link set eth0 up # line maintained by pppoeconf
+#provider dsl-provider
+
+auto eth0
+#iface eth0 inet manual
+
+
+#allow-hotplug eth0
+#allow-hotplug eth0
+#iface eth0 inet6 dhcp
+iface eth0 inet dhcp
+#iface eth0 inet6 auto
+
+#auto dsl-provider
+#iface dsl-provider inet ppp
+#provider dsl-provider
