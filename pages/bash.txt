@@ -1,3 +1,5 @@
+sudo rm /var/cache/apt/archives/*.deb
+
 cp -R t1/. t2/ //Copy files from one directory into an existing directory
 
 
@@ -53,3 +55,78 @@ http://0.0.0.0:8000/ari/  setup connetsetup input token in .aria2/aria2.conf
 sudo /etc/init.d/miredo start
 source ~/.bashrc
 dpkg -l | grep wiki
+
+https://codeload.github.com/xyuanmu/XX-Mini/zip/python3
+
+http://www.kookle.co.nr
+https://archive.is/x1YQy 
+win10.ipv6.microsoft.com
+https://github.com/SeaHOH/pteredor
+view-source:x
+
+
+How do I find all files containing specific text on Linux?
+https://stackoverflow.com/questions/16956810/how-do-i-find-all-files-containing-specific-text-on-linux
+grep -rnw '/home/mike/xnet3/XX-Net-python3/lib/common/' -e 'b"'
+
+
+    -r or -R is recursive,
+    -n is line number, and
+    -w stands for match the whole word.
+    -l (lower-case L) can be added to just give the file name of matching files.
+
+Along with these, --exclude, --include, --exclude-dir flags could be used for efficient searching:
+
+    This will only search through those files which have .c or .h extensions:
+
+    grep --include=\*.{c,h} -rnw '/path/to/somewhere/' -e "pattern"
+
+    This will exclude searching all the files ending with .o extension:
+
+    grep --exclude=*.o -rnw '/path/to/somewhere/' -e "pattern"
+
+    For directories it's possible to exclude a particular directory(ies) through --exclude-dir parameter. For example, this will exclude the dirs dir1/, dir2/ and all of them matching *.dst/:
+
+    grep --exclude-dir={dir1,dir2,*.dst} -rnw '/path/to/somewhere/' -e "pattern"
+
+This works very well for me, to achieve almost the same purpose like yours.
+
+For more options check man grep.
+
+
+grep -Ril "text-to-find-here" /
+
+    i stands for ignore case (optional in your case).
+    R stands for recursive.
+    l stands for "show the file name, not the result itself".
+    / stands for starting at the root of your machine.
+
+grep -rnw '.' -e "apiproxy_errorsh"
+
+which -a pip
+/usr/local/bin/pip
+
+pip3.6 freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 sudo pip3.6 install -U
+
+export QT_SCALE_FACTOR=1.5
+sudo easy_install -U pip
+chromium --proxy-server="http://127.0.0.1:8087"
+
+find . -exec mv {} /foo \;
+
+find 大王*/ -type f -name "*.gif"  -exec mv {} ~/t/45/king_gif \;
+find /root/directory/to/search -name 'filename.*'
+find . -type f -name 'btree*.c'
+
+find / -size +700M
+
+sudo mount /dev/sdb1 /media/usb
+sudo cp *.mp3 /media/usb/
+sudo umount /media/usb
+
+find . -type f -name "*.pyc"  -exec rm {} \;
+head -n 10 .aria2/aria2.conf
+
+sed -i -e 's/0/1/g' /home/mike/.mozilla/firefox/gupfzry5.default/user.js
+
+find . -type f -name "*.jpeg"  -exec mv {} ~/t/45/pngx \;
